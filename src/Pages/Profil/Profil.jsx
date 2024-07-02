@@ -1,9 +1,17 @@
 import Footer from "../../layout/Footer/Footer";
 import Header from "../../layout/Header/Header";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import Sign_in from "../../Pages/Sign-In/Sign_in";
 
 function Profil() {
+  const [token, setToken] = useState();
+
+  if(!token) {
+    return <Sign_in setToken={setToken} />
+  }
+
   return (
     <>
      <Header />
@@ -51,4 +59,3 @@ function Profil() {
 }
 
 export default Profil
-

@@ -2,8 +2,12 @@ import Logo from "../../assets/img/argentBankLogo.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { useState } from "react"
+
 
 function Header() {
+  const [isLogged, setIsLogged] = useState(false);
+
   return (
     <>
       <nav className="main-nav">
@@ -15,12 +19,21 @@ function Header() {
           />
           <h1 className="sr-only">Argent Bank</h1>
         </a>
+        { !isLogged ?
         <div>
             <FontAwesomeIcon icon={faCircleUser} />
           <a className="main-nav-item" href="/login">
             Sign In
           </a>
         </div>
+        :
+        <div>
+        <FontAwesomeIcon icon={faRightFromBracket} />
+      <a className="main-nav-item" href="/">
+        Log out
+      </a>
+    </div>
+        }
       </nav>
     </>
   );
