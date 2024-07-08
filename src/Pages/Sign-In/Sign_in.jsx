@@ -1,32 +1,54 @@
 import Footer from "../../layout/Footer/Footer";
 import Header from "../../layout/Header/Header";
+import jwtDecode from 'jwt-decode';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+
 
 async function loginUser(credentials) {
-  return fetch("http://localhost:3001/login", {
+  const response = await fetch("http://localhost:3001/api/v1/user/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    throw new Error("Response is not JSON");
+  }
 }
 
 function Sign_in({ setToken }) {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = await loginUser({
-      username,
-      password,
-    });
-    setToken(token);
+    try {
+      const { token } = await loginUser({ email, password });
+      setToken(token);
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+      navigate(`/user/${userId}/profile`);
+    } catch (error) {
+      setError(error.message);
+      console.error("Login failed", error);
+    }
   };
+
 
   return (
     <>
@@ -41,7 +63,7 @@ function Sign_in({ setToken }) {
               <input
                 type="text"
                 id="username"
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="input-wrapper">

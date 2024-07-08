@@ -2,11 +2,27 @@ import Footer from "../../layout/Footer/Footer";
 import Header from "../../layout/Header/Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sign_in from "../../Pages/Sign-In/Sign_in";
+import { useParams } from 'react-router-dom';
 
 function Profil() {
+  const { id } = useParams();
   const [token, setToken] = useState();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const response = await fetch(`http://localhost:3001/api/v1/user/${id}`);
+      const data = await response.json();
+      setUser(data);
+    }
+    fetchUser();
+  }, [id]);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   if(!token) {
     return <Sign_in setToken={setToken} />
@@ -17,7 +33,7 @@ function Profil() {
      <Header />
       <main className="main bg-dark">
       <div className="header">
-        <h1>Welcome back<br />Tony Jarvis!</h1>
+        <h1>Welcome back<br />{user.firstName} {user.lastName}!</h1>
         <button className="edit-button">Edit Name</button>
       </div>
       <h2 className="sr-only">Accounts</h2>
