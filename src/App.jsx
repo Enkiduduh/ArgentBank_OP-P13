@@ -1,27 +1,31 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Index from "./Pages/Index/Index";
-import Sign_in from "./Pages/Sign-In/Sign_in";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import Error from "./Pages/Error/Error"
-import Profil from "./Pages/Profil/Profil";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import Error from "./Pages/Error/Error";
+import Profile from "./Pages/Profile/Profile";
 import React, { useState } from "react";
+import { Provider } from "react-redux";
+import store from "./store";
 
-library.add(fas)
+library.add(fas);
 
 function App() {
   const [token, setToken] = useState(null);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Sign_in setToken={setToken} />} />
-        <Route path={`/user/:id/profil`} element={<Profil />} />
-        <Route path="*" element={<Error />} />
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path={`profile`} element={<Profile />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 
