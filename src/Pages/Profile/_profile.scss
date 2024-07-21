@@ -75,7 +75,7 @@
       border-radius: 3px;
       color: grey;
       font-size: 20px;
-      margin-left: 15px;
+      padding-left: 15px;
       &:focus {
         outline: none;
       }
@@ -98,6 +98,7 @@
     border-radius: 3px;
     margin: 5px 10px;
     color: green;
+    font-weight: bold;
   }
 }
 

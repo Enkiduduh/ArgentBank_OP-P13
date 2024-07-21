@@ -30,6 +30,7 @@
   text-decoration: none;
   margin-right: 0.5rem;
   margin-left: 0.5rem;
+  cursor: pointer;
 }
 
 .main-nav-item:hover {
@@ -58,6 +59,20 @@
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important; /* 3 */
+}
+
+.log {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.log .loginfos1 {
+  display: flex;
+  margin-right: 10px;
+}
+.log .loginfos2 {
+  display: flex;
+  margin-left: 10px;
 }
 
 .hero {
@@ -278,7 +293,7 @@
   border-radius: 3px;
   color: grey;
   font-size: 20px;
-  margin-left: 15px;
+  padding-left: 15px;
 }
 .profil-name-case .profil-name .name:focus {
   outline: none;
@@ -300,6 +315,7 @@
   border-radius: 3px;
   margin: 5px 10px;
   color: green;
+  font-weight: bold;
 }
 
 .transaction-button {

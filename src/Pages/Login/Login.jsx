@@ -57,6 +57,7 @@ function Sign_in() {
         "Token stored in localStorage:",
         localStorage.getItem("token")
       );
+      dispatch(setToken({ token })); // Dispatch the token to Redux
       navigate(`/profile`);
     } catch (error) {
       console.error("Login failed", error);
@@ -76,6 +77,7 @@ function Sign_in() {
               <input
                 type="email"
                 id="email"
+                required
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -84,6 +86,7 @@ function Sign_in() {
               <input
                 type="password"
                 id="password"
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

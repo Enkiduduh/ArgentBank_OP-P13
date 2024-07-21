@@ -3,97 +3,143 @@ import Header from "../../layout/Header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import Login from "../Login/Login";
-import { jwtDecode } from "jwt-decode";
+import { useSelector, useDispatch  } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUserData } from "../../features/auth/authSlice"; // Importez une action pour mettre à jour les données utilisateur dans Redux
 
 function Profil() {
-  const [token, setToken] = useState();
   const [user, setUser] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Vérifiez si le token est déjà stocké dans localStorage
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(token);
     if (token) {
-      try {
-        const fetchUserData = async () => {
-          try {
-            const response = await fetch(
-              `http://localhost:3001/api/v1/user/profile`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            console.log(response);
-            if (response.ok) {
-              const data = await response.json();
-              setUser(data);
-              console.log(data);
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/api/v1/user/profile`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
             }
-          } catch (error) {
-            console.error(
-              "Erreur lors de la récupération des données utilisateur:",
-              error
-            );
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data);
+            setFirstName(data.body.firstName);
+            setLastName(data.body.lastName);
+          } else {
+            console.error("Failed to fetch user data:", response.status);
           }
-        };
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des données utilisateur:",
+            error
+          );
+        }
+      };
 
-        fetchUserData();
-      } catch (error) {
-        console.error("Invalid token:", error);
-      }
+      fetchUserData();
+    } else {
+      navigate("/Login"); // Redirect to login if token is not available
     }
-  }, [token]);
-
-  if (!token) {
-    return <Login setToken={setToken} />;
-  }
+  }, [token, navigate]);
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
+  const handleEditButton = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelingButton = () => {
+    setIsEditing(false)
+  };
+
+  const handleSaveButton = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/v1/user/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ firstName, lastName }),
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        setIsEditing(false);
+
+        dispatch(setUserData({ firstName: updatedUser.body.firstName, lastName: updatedUser.body.lastName }));
+      } else {
+        console.error('Failed to update user data:', response.status);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour des données utilisateur:", error);
+    }
+  };
+
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+  };
+
+
   return (
     <>
-      <Header />
+      <Header user={user.body.firstName} />
       <main className="main bg-dark">
-        <div className="header">
-          <h1>
-            Welcome back
-            <br />
-            {user.body.firstName} {user.body.lastName}!
-          </h1>
-          <button className="edit-button">Edit Name</button>
-        </div>
-        <div className="header">
-          <h1>Welcome back</h1>
-          <form action="">
-          <div className="profil-name-case">
-            <div className="profil-name">
-              <input type="text" className="name" value={user.body.lastName} />
-            </div>
-            <div className="profil-name">
-              <input type="text" className="name" value={user.body.firstName} />
-            </div>
+        {!isEditing ? (
+          <div className="header">
+            <h1>
+              Welcome back
+              <br />
+              {firstName} {lastName}!
+            </h1>
+            <button className="edit-button" onClick={handleEditButton}>Edit Name</button>
           </div>
-
-          <div className="edit-profil-button-case">
-            <div className="edit-profil-button">Save</div>
-            <div className="edit-profil-button">Cancel</div>
+        ) : (
+          <div className="header">
+            <h1>Welcome back</h1>
+            <form onSubmit={(e) => { e.preventDefault(); handleSaveButton(); }}>
+              <div className="profil-name-case">
+                <div className="profil-name">
+                  <input
+                    type="text"
+                    className="name"
+                    value={lastName}
+                    onChange={handleLastNameChange}
+                  />
+                </div>
+                <div className="profil-name">
+                  <input
+                    type="text"
+                    className="name"
+                    value={firstName}
+                    onChange={handleFirstNameChange}
+                  />
+                </div>
+              </div>
+              <div className="edit-profil-button-case">
+                <div className="edit-profil-button" onClick={handleSaveButton}>Save</div>
+                <div className="edit-profil-button" onClick={handleCancelingButton}>Cancel</div>
+              </div>
+            </form>
           </div>
-          </form>
-        </div>
-
+        )}
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
           <div className="account-content-wrapper">

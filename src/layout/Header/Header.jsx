@@ -1,12 +1,26 @@
-import Logo from "../../assets/img/argentBankLogo.png"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { useState } from "react"
+import Logo from "../../assets/img/argentBankLogo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { clearToken } from '../../features/auth/authSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
+function Header({ user }) {
+  const isLogged = useSelector((state) => state.auth.isLogged);
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-function Header() {
-  const [isLogged, setIsLogged] = useState(false);
+  const handleClickOut = () => {
+    dispatch(clearToken());
+    navigate(`/`);
+  };
+
+  const handleClickIn = () => {
+    navigate(`/Login`);
+  };
+
 
   return (
     <>
@@ -19,21 +33,29 @@ function Header() {
           />
           <h1 className="sr-only">Argent Bank</h1>
         </a>
-        { !isLogged ?
-        <div>
+        {!isLogged ? (
+          <div className="log">
             <FontAwesomeIcon icon={faCircleUser} />
-          <a className="main-nav-item" href="/login">
-            Sign In
-          </a>
-        </div>
-        :
-        <div>
-        <FontAwesomeIcon icon={faRightFromBracket} />
-      <a className="main-nav-item" href="/">
-        Log out
-      </a>
-    </div>
-        }
+            <div className="main-nav-item" onClick={handleClickIn}>
+              Sign In
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="log">
+              <div className="loginfos1">
+                <FontAwesomeIcon icon={faCircleUser} />
+              </div>
+              <div className="loginfos1">{user}</div>
+              <div className="loginfos2">
+                <FontAwesomeIcon icon={faRightFromBracket} />
+                <div className="main-nav-item" onClick={handleClickOut}>
+                  Log out
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </nav>
     </>
   );

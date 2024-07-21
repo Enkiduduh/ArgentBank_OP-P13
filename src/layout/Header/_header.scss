@@ -18,6 +18,7 @@
   text-decoration: none;
   margin-right: 0.5rem;
   margin-left: 0.5rem;
+  cursor: pointer;
 }
 
 .main-nav-item:hover {
@@ -46,4 +47,20 @@
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important; /* 3 */
+}
+
+.log {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .loginfos1 {
+    display: flex;
+    margin-right: 10px;
+
+  }
+  .loginfos2 {
+    display: flex;
+    margin-left: 10px;
+  }
 }
