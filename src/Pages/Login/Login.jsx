@@ -35,42 +35,6 @@ function Sign_in() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const data = await loginUser({ email, password });
-  //     const token = data.token;
-  //     localStorage.setItem('token', token);
-  //     dispatch(setToken({ token }));
-  //     navigate(`/profile`);
-  //   } catch (error) {
-  //     console.error('Login failed', error);
-  //   }
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const data = await loginUser({ email, password });
-  //     const token = data.token;
-  //     console.log(typeof token);
-  //     console.log(token);
-  //     console.log(token.split(".").length)
-  //     if (typeof token !== "string" || token.split(".").length !== 3) {
-  //       throw new Error("Invalid token specified: must be a valid JWT");
-  //     }
-
-  //     localStorage.setItem("token", token);
-  //     console.log(
-  //       "Token stored in localStorage:",
-  //       localStorage.getItem("token")
-  //     );
-  //     navigate(`/profile`);
-  //   } catch (error) {
-  //     console.error("Login failed", error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

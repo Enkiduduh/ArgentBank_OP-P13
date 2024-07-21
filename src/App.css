@@ -259,6 +259,49 @@
   margin-bottom: 2rem;
 }
 
+.profil-name-case {
+  margin: 0 auto;
+  display: flex;
+  border-radius: 5px;
+  justify-content: center;
+}
+.profil-name-case .profil-name {
+  margin: 5px 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.profil-name-case .profil-name .name {
+  width: 200px;
+  height: 40px;
+  border: 3px solid grey;
+  border-radius: 3px;
+  color: grey;
+  font-size: 20px;
+  margin-left: 15px;
+}
+.profil-name-case .profil-name .name:focus {
+  outline: none;
+}
+
+.edit-profil-button-case {
+  margin: 0 auto;
+  display: flex;
+  border-radius: 5px;
+  justify-content: center;
+}
+.edit-profil-button-case .edit-profil-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  border: 3px solid green;
+  height: 40px;
+  border-radius: 3px;
+  margin: 5px 10px;
+  color: green;
+}
+
 .transaction-button {
   display: block;
   width: 100%;

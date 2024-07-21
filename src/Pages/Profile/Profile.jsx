@@ -18,39 +18,8 @@ function Profil() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token);
-  //     const userId = decodedToken.id;
-
-  //     const fetchUserData = async () => {
-  //       try {
-  //         const response = await fetch(`http://localhost:3001/api/v1/user/${userId}`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`
-  //           }
-  //         });
-  //         const data = await response.json();
-  //         setUser(data);
-  //       } catch (error) {
-  //         console.error('Erreur lors de la récupération des données utilisateur:', error);
-  //       }
-  //     };
-
-  //     fetchUserData();
-  //   }
-  // }, [token]);
-
-  // if (!token) {
-  //   return <Login setToken={setToken} />;
-  // }
-
-  // if (!user) {
-  //   return <div>Loading...</div>;
-  // }
-
   useEffect(() => {
-    console.log(token)
+    console.log(token);
     if (token) {
       try {
         const fetchUserData = async () => {
@@ -58,19 +27,18 @@ function Profil() {
             const response = await fetch(
               `http://localhost:3001/api/v1/user/profile`,
               {
-                method: 'PUT',
+                method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`
+                  Authorization: `Bearer ${token}`,
                 },
               }
             );
-            console.log(response)
+            console.log(response);
             if (response.ok) {
               const data = await response.json();
-              const username = data.body.userName;
               setUser(data);
-              console.log(username);
+              console.log(data);
             }
           } catch (error) {
             console.error(
@@ -103,10 +71,29 @@ function Profil() {
           <h1>
             Welcome back
             <br />
-            {user.firstName} {user.lastName}!
+            {user.body.firstName} {user.body.lastName}!
           </h1>
           <button className="edit-button">Edit Name</button>
         </div>
+        <div className="header">
+          <h1>Welcome back</h1>
+          <form action="">
+          <div className="profil-name-case">
+            <div className="profil-name">
+              <input type="text" className="name" value={user.body.lastName} />
+            </div>
+            <div className="profil-name">
+              <input type="text" className="name" value={user.body.firstName} />
+            </div>
+          </div>
+
+          <div className="edit-profil-button-case">
+            <div className="edit-profil-button">Save</div>
+            <div className="edit-profil-button">Cancel</div>
+          </div>
+          </form>
+        </div>
+
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
           <div className="account-content-wrapper">
