@@ -2,13 +2,13 @@ import Logo from "../../assets/img/argentBankLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { clearToken } from '../../features/auth/authSlice';
+import { clearToken } from "../../features/auth/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-function Header({ user }) {
+function Header() {
   const isLogged = useSelector((state) => state.auth.isLogged);
-  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +21,9 @@ function Header({ user }) {
     navigate(`/Login`);
   };
 
+  const handleClickProfile = () => {
+    navigate(`/profile`);
+  };
 
   return (
     <>
@@ -46,7 +49,9 @@ function Header({ user }) {
               <div className="loginfos1">
                 <FontAwesomeIcon icon={faCircleUser} />
               </div>
-              <div className="loginfos1">{user}</div>
+              <div className="loginfos1" onClick={handleClickProfile}>
+                {user && user.firstName}
+              </div>
               <div className="loginfos2">
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 <div className="main-nav-item" onClick={handleClickOut}>

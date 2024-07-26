@@ -15,6 +15,8 @@ export const authSlice = createSlice({
     clearToken: (state) => {
       state.token = null;
       state.isLogged = false;
+      state.user = null;
+      localStorage.removeItem('token');
     },
     setUserData: (state, action) => {
       state.user = action.payload;

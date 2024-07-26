@@ -100,7 +100,6 @@ function Profil() {
 
   return (
     <>
-      <Header user={user.body.firstName} />
       <main className="main bg-dark">
         {!isEditing ? (
           <div className="header">

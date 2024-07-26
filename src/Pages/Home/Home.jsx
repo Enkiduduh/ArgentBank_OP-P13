@@ -7,7 +7,6 @@ import money from "../../assets/img/icon-money.png"
 function Index() {
   return (
     <>
-      <Header />
       <main>
         <div className="hero">
           <section className="hero-content">

@@ -5,8 +5,9 @@ import Header from "../../layout/Header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setToken } from "../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, setUserData  } from "../../features/auth/authSlice";
+import { useEffect } from "react";
 
 async function loginUser(credentials) {
   try {
@@ -30,10 +31,17 @@ async function loginUser(credentials) {
 }
 
 function Sign_in() {
+  const isLogged = useSelector((state) => state.auth.isLogged);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+useEffect(() => {
+  if (isLogged) {
+    navigate(`/profile`);
+  }
+})
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,15 +66,30 @@ function Sign_in() {
         localStorage.getItem("token")
       );
       dispatch(setToken({ token })); // Dispatch the token to Redux
-      navigate(`/profile`);
+       // Fetch user data immediately after setting the token
+       const response = await fetch(`http://localhost:3001/api/v1/user/profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        dispatch(setUserData(userData.body));
+        navigate(`/profile`);
+      } else {
+        console.error("Failed to fetch user data");
+      }
     } catch (error) {
       console.error("Login failed", error);
     }
   };
 
+
   return (
     <>
-      <Header />
       <main className="main bg-dark">
         <section className="sign-in-content">
           <FontAwesomeIcon icon={faCircleUser} />
