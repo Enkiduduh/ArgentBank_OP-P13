@@ -16,6 +16,22 @@ function Profil() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [isScreenWider480, setIsScreenWider480] = useState(
+    window.innerWidth > 480,
+)
+
+useEffect(() => {
+  const handleResize = () => {
+      setIsScreenWider480(window.innerWidth > 480)
+  }
+
+  window.addEventListener('resize', handleResize)
+
+  return () => {
+      window.removeEventListener('resize', handleResize)
+  }
+}, [])
+
   useEffect(() => {
     if (token) {
       const fetchUserData = async () => {
@@ -101,44 +117,75 @@ function Profil() {
   return (
     <>
       <main className="main bg-dark">
-        {!isEditing ? (
-          <div className="header">
-            <h1>
-              Welcome back
-              <br />
-              {firstName} {lastName}!
-            </h1>
-            <button className="edit-button" onClick={handleEditButton}>Edit Name</button>
+      {!isEditing ? (
+  <div className="header">
+    <h1>
+      Welcome back
+      <br />
+      {firstName} {lastName}!
+    </h1>
+    <button className="edit-button" onClick={handleEditButton}>Edit Name</button>
+  </div>
+) : (
+  isScreenWider480 ? (
+    <div className="header">
+      <h1>Welcome back</h1>
+      <form onSubmit={(e) => { e.preventDefault(); handleSaveButton(); }}>
+        <div className="profil-name-case">
+          <div className="profil-name">
+            <input
+              type="text"
+              className="name"
+              value={lastName}
+              onChange={handleLastNameChange}
+            />
           </div>
-        ) : (
-          <div className="header">
-            <h1>Welcome back</h1>
-            <form onSubmit={(e) => { e.preventDefault(); handleSaveButton(); }}>
-              <div className="profil-name-case">
-                <div className="profil-name">
-                  <input
-                    type="text"
-                    className="name"
-                    value={lastName}
-                    onChange={handleLastNameChange}
-                  />
-                </div>
-                <div className="profil-name">
-                  <input
-                    type="text"
-                    className="name"
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                  />
-                </div>
-              </div>
-              <div className="edit-profil-button-case">
-                <div className="edit-profil-button" onClick={handleSaveButton}>Save</div>
-                <div className="edit-profil-button" onClick={handleCancelingButton}>Cancel</div>
-              </div>
-            </form>
+          <div className="profil-name">
+            <input
+              type="text"
+              className="name"
+              value={firstName}
+              onChange={handleFirstNameChange}
+            />
           </div>
-        )}
+        </div>
+        <div className="edit-profil-button-case">
+          <div className="edit-profil-button" onClick={handleSaveButton}>Save</div>
+          <div className="edit-profil-button" onClick={handleCancelingButton}>Cancel</div>
+        </div>
+      </form>
+    </div>
+  ) : (
+    <div className="header">
+      <h1>Welcome back</h1>
+      <form onSubmit={(e) => { e.preventDefault(); handleSaveButton(); }}>
+        <div className="profil-name-case">
+          <div className="profil-name">
+            <input
+              type="text"
+              className="name"
+              value={lastName}
+              onChange={handleLastNameChange}
+            />
+          </div>
+          <div className="profil-name">
+            <input
+              type="text"
+              className="name"
+              value={firstName}
+              onChange={handleFirstNameChange}
+            />
+          </div>
+        </div>
+        <div className="edit-profil-button-case">
+          <div className="edit-profil-button" onClick={handleSaveButton}>Save</div>
+          <div className="edit-profil-button" onClick={handleCancelingButton}>Cancel</div>
+        </div>
+      </form>
+    </div>
+  )
+)}
+
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
           <div className="account-content-wrapper">

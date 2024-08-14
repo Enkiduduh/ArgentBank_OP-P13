@@ -127,3 +127,18 @@
     width: 200px;
   }
 }
+
+@media only screen and (max-width: 480px) {
+  .profil-name-case {
+    .profil-name {
+      .name {
+        width: 100px;
+      }
+    }
+  }
+  .edit-profil-button-case {
+    .edit-profil-button {
+      width: 70px;
+    }
+  }
+}
